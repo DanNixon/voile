@@ -25,7 +25,7 @@ var rootCmd = &cobra.Command{
 	Short: "Query bookmark library",
 	Long:  `Query bookmark library and open results.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		// Get bookmark number
+		// Load bookmarks from file
 		bmks := ReadBookmarksFromFile()
 
 		// Get action flags
