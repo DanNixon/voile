@@ -1,4 +1,4 @@
-# Voile
+# Voile [![Build Status](https://travis-ci.org/DanNixon/voile.svg?branch=master)](https://travis-ci.org/DanNixon/voile)
 
 Command line bookmark management tool focused on simplicity and speed.
 
