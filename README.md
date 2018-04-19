@@ -13,3 +13,4 @@ Command line bookmark management tool focused on simplicity and speed.
 ## To do
 
 - Editing via flags
+- Option to auto-set title from page title
