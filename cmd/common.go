@@ -71,11 +71,19 @@ func FormatBookmark(bm *db.Bookmark, index int) string {
 		index, bm.Name, bm.Number, bm.Url, bm.Tags)
 }
 
-func EditBookmarkInEditor(bm *db.Bookmark) {
+func EditBookmarkInEditor(bmks *db.BookmarkLibrary, bm *db.Bookmark) {
 	var err error
 
-	// Launch editor with existing bookmark data
+	// Generate default bookmark string
 	bmStr := bm.FormatAsInteractiveFileString()
+
+	// Add existing tags commented at end of string
+	bmStr += "# Existing tags:\n"
+	for _, t := range bmks.GetAllTags().Tags.Tags {
+		bmStr += "# " + t + "\n"
+	}
+
+	// Launch editor with existing bookmark data
 	bmStr, err = tui.EditText(bmStr)
 	CheckError(err)
 

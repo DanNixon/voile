@@ -24,7 +24,7 @@ var editCmd = &cobra.Command{
 		CheckError(err)
 
 		// Edit bookmark
-		EditBookmarkInEditor(bm)
+		EditBookmarkInEditor(&bmks, bm)
 
 		// Print bookmark to console
 		fmt.Println(FormatBookmark(bm, 0))

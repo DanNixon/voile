@@ -58,7 +58,7 @@ var addCmd = &cobra.Command{
 		// Edit in editor if requested
 		editFlag, _ := cmd.Flags().GetBool(EditFlagName)
 		if editFlag {
-			EditBookmarkInEditor(bm)
+			EditBookmarkInEditor(&bmks, bm)
 		}
 
 		// Print bookmark to console
