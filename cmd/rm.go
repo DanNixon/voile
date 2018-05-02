@@ -21,6 +21,11 @@ var rmCmd = &cobra.Command{
 		// Load bookmarks from file
 		bmks := ReadBookmarksFromFile()
 
+		// Get bookmark and print to console
+		bm, err := bmks.GetByNumber(bookmarkNumber)
+		CheckError(err)
+		fmt.Println(FormatBookmark(bm, 0))
+
 		// Determine if bookmark should be deleted
 		rm, _ := cmd.Flags().GetBool(ForceFlagName)
 		if !rm {
