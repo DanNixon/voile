@@ -45,6 +45,9 @@ const (
 	NameFlagName  = "name"
 	NameFlagShort = "n"
 
+	TitleNameFlagName  = "autoname"
+	TitleNameFlagShort = "a"
+
 	UrlFlagName  = "url"
 	UrlFlagShort = "u"
 

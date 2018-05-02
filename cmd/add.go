@@ -6,6 +6,8 @@ import (
 
 	"github.com/atotto/clipboard"
 	"github.com/spf13/cobra"
+
+	"github.com/DanNixon/voile/web"
 )
 
 var addCmd = &cobra.Command{
@@ -38,8 +40,13 @@ var addCmd = &cobra.Command{
 		bm.Url = url
 
 		// Set name
-		if cmd.Flags().Changed(NameFlagName) {
-			bm.Name, _ = cmd.Flags().GetString(NameFlagName)
+		titleNameFlag, _ := cmd.Flags().GetBool(TitleNameFlagName)
+		if titleNameFlag {
+			bm.Name, _ = web.FindTitleElement(bm.Url)
+		} else {
+			if cmd.Flags().Changed(NameFlagName) {
+				bm.Name, _ = cmd.Flags().GetString(NameFlagName)
+			}
 		}
 
 		// Set description
@@ -74,6 +81,7 @@ func init() {
 
 	addCmd.Flags().BoolP(CopyFlagName, CopyFlagShort, false, "Copy URL from clipboard")
 	addCmd.Flags().BoolP(EditFlagName, EditFlagShort, false, "Add/edit the new bookmark in a text editor")
+	addCmd.Flags().BoolP(TitleNameFlagName, TitleNameFlagShort, false, "Get bookmark name from title of page")
 
 	addCmd.Flags().StringSliceP(TagsFlagName, TagsFlagShort, []string{}, "Tags")
 	addCmd.Flags().StringP(NameFlagName, NameFlagShort, "", "Name")

@@ -18,6 +18,5 @@ go get github.com/DanNixon/voile
 
 ## To Do
 
-- Option to auto-set title from page title
 - "Quick add" command (copies URL from clipboard, gets name from page title, takes tags from arguments)
 - Editing via flags
