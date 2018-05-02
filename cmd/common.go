@@ -64,7 +64,7 @@ func CheckError(err error) {
 
 var bookmarkFormatStr = fmt.Sprintf(
 	"%s %s %s%s%s\n  %s %s\n  %s %s",
-	Black("%d."), Bold(Green("%s")), Black("["), Cyan("%d"), Black("]"),
+	Black("%d."), Bold(Green("%s")), Black("["), Bold(Cyan("%d")), Black("]"),
 	Red(">"), Brown("%s"),
 	Red("#"), Blue("%s"))
 
