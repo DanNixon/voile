@@ -11,17 +11,33 @@ import (
 )
 
 const TestBookmarkInteractiveFileExpectedString = `# Bookmark
-# Lines must not be reordered
+# Headings must not be edited
 # Lines starting with a # are ignored
-# There must be no empty lines other than empty fields
-# Title
+## Title
 BBC
-# URL
+## URL
 https://bbc.co.uk
-# Description (single line)
+## Description
 BBC News and Weather
-# Tags (comma separated, single line)
-news, weather
+## Tags (comma and newline separated)
+news
+weather
+`
+
+const TestBookmarkInteractiveFileExpectedStringMultiline = `# Bookmark
+# Headings must not be edited
+# Lines starting with a # are ignored
+## Title
+BBC
+## URL
+https://bbc.co.uk
+## Description
+BBC News and Weather.
+
+(and sport)
+## Tags (comma and newline separated)
+news,weather
+sport
 `
 
 var testBookmark = db.Bookmark{
@@ -106,6 +122,22 @@ func TestBookmarkFormatAsInteractiveFileString(t *testing.T) {
 func TestBookmarkUpdateFromInteractiveFileString(t *testing.T) {
 	var bm db.Bookmark
 	bm.UpdateFromInteractiveFileString(TestBookmarkInteractiveFileExpectedString)
+	assert.Equal(t, testBookmark, bm)
+}
+
+func TestBookmarkUpdateFromInteractiveFileStringMultiline(t *testing.T) {
+	var bm db.Bookmark
+	bm.UpdateFromInteractiveFileString(TestBookmarkInteractiveFileExpectedStringMultiline)
+
+	var testBookmark = db.Bookmark{
+		Number:      0,
+		Name:        "BBC",
+		Url:         "https://bbc.co.uk",
+		Description: "BBC News and Weather.\n(and sport)",
+		Tags: db.TagList{
+			Tags: []string{"news", "sport", "weather"},
+		},
+	}
 	assert.Equal(t, testBookmark, bm)
 }
 

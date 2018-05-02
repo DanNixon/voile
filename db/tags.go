@@ -40,6 +40,10 @@ func (tl TagList) String() string {
 	return strings.Join(tl.Tags, ", ")
 }
 
+func (tl TagList) MultilineString() string {
+	return strings.Join(tl.Tags, "\n")
+}
+
 func (tl *TagList) ContainsAllTags(tags []string) bool {
 	if len(tags) == 0 {
 		return false

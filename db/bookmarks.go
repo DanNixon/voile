@@ -11,24 +11,23 @@ import (
 )
 
 const BookmarkInteractiveFileFormatString = `# Bookmark
-# Lines must not be reordered
+# Headings must not be edited
 # Lines starting with a # are ignored
-# There must be no empty lines other than empty fields
-# Title
+## Title
 %s
-# URL
+## URL
 %s
-# Description (single line)
+## Description
 %s
-# Tags (comma separated, single line)
+## Tags (comma and newline separated)
 %s
 `
 
 const (
-	BookmarkInteractiveFileNameLine        = iota
-	BookmarkInteractiveFileUrlLine         = iota
-	BookmarkInteractiveFileDescriptionLine = iota
-	BookmarkInteractiveFileTagsLine        = iota
+	BookmarkInteractiveFileNameHeader        = "## Title"
+	BookmarkInteractiveFileUrlHeader         = "## URL"
+	BookmarkInteractiveFileDescriptionHeader = "## Description"
+	BookmarkInteractiveFileTagsHeader        = "## Tags"
 )
 
 func subStringMatches(query, source string) bool {
@@ -60,14 +59,32 @@ func (bm *Bookmark) DescriptionMatches(query string) bool {
 func (bm *Bookmark) FormatAsInteractiveFileString() string {
 	return fmt.Sprintf(
 		BookmarkInteractiveFileFormatString,
-		bm.Name, bm.Url, bm.Description, bm.Tags.String())
+		bm.Name, bm.Url, bm.Description, bm.Tags.MultilineString())
 }
 
 func (bm *Bookmark) UpdateFromInteractiveFileString(data string) error {
 	lines := strings.Split(data, "\n")
-	parsedLine := 0
+	header := ""
+
+	var bookmarkInteractiveFileHeaderStrings = [...]string{
+		BookmarkInteractiveFileNameHeader,
+		BookmarkInteractiveFileUrlHeader,
+		BookmarkInteractiveFileDescriptionHeader,
+		BookmarkInteractiveFileTagsHeader,
+	}
+
+	bm.Description = ""
+
 	for _, l := range lines {
 		l = strings.TrimSpace(l)
+
+		// Match header
+		for _, h := range bookmarkInteractiveFileHeaderStrings {
+			if strings.HasPrefix(l, h) {
+				header = h
+				break
+			}
+		}
 
 		// Ignore commented out lines
 		if strings.HasPrefix(l, "#") {
@@ -75,19 +92,19 @@ func (bm *Bookmark) UpdateFromInteractiveFileString(data string) error {
 		}
 
 		// Parse the line based on which valid line it was
-		switch parsedLine {
-		case BookmarkInteractiveFileNameLine:
+		switch header {
+		case BookmarkInteractiveFileNameHeader:
 			bm.Name = l
-			parsedLine++
-		case BookmarkInteractiveFileUrlLine:
+		case BookmarkInteractiveFileUrlHeader:
 			bm.Url = l
-			parsedLine++
-		case BookmarkInteractiveFileDescriptionLine:
-			bm.Description = l
-			parsedLine++
-		case BookmarkInteractiveFileTagsLine:
+		case BookmarkInteractiveFileDescriptionHeader:
+			if len(l) > 0 {
+				bm.Description += l
+			} else {
+				bm.Description += "\n"
+			}
+		case BookmarkInteractiveFileTagsHeader:
 			bm.Tags.AppendFromString(l)
-			parsedLine++
 		}
 	}
 
