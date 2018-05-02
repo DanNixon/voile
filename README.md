@@ -15,8 +15,3 @@ go get github.com/DanNixon/voile
 - Text editor based entry manipulation
 - Open bookmarks in browser
 - Copy bookmarks to and from clipboard
-
-## To Do
-
-- "Quick add" command (copies URL from clipboard, gets name from page title, takes tags from arguments)
-- Editing via flags
