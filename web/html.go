@@ -8,14 +8,16 @@ import (
 )
 
 func FinditleElementInDocument(n *html.Node) (string, error) {
-	if n.Type == html.ElementNode && n.Data == "title" && n.FirstChild.Type == html.TextNode {
-		return n.FirstChild.Data, nil
-	}
+	if n != nil && n.FirstChild != nil {
+		if n.Type == html.ElementNode && n.Data == "title" && n.FirstChild.Type == html.TextNode {
+			return n.FirstChild.Data, nil
+		}
 
-	for c := n.FirstChild; c != nil; c = c.NextSibling {
-		res, err := FinditleElementInDocument(c)
-		if err == nil {
-			return res, nil
+		for c := n.FirstChild; c != nil; c = c.NextSibling {
+			res, err := FinditleElementInDocument(c)
+			if err == nil {
+				return res, nil
+			}
 		}
 	}
 
