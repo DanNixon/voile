@@ -14,6 +14,7 @@ import (
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"gopkg.in/src-d/go-git.v4"
 
 	"github.com/DanNixon/voile/db"
 
@@ -141,6 +142,16 @@ func SaveBookmarksToFile(bmks *db.BookmarkLibrary) {
 	err = ioutil.WriteFile(
 		viper.GetString(BookmarksFileConfigEntry), []byte(raw), 0644)
 	CheckError(err)
+}
+
+func GetBookmarksFileParentDirectory() string {
+	filename := viper.GetString(BookmarksFileConfigEntry)
+	return filepath.Dir(filename)
+}
+
+func IsBookmarksFileInGitRepository() bool {
+	_, err := git.PlainOpen(GetBookmarksFileParentDirectory())
+	return err == nil
 }
 
 func init() {
