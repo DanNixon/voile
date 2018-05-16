@@ -9,12 +9,15 @@ import (
 	"path/filepath"
 	"sort"
 	"strconv"
+	"time"
 
 	. "github.com/logrusorgru/aurora"
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"github.com/tcnksm/go-gitconfig"
 	"gopkg.in/src-d/go-git.v4"
+	"gopkg.in/src-d/go-git.v4/plumbing/object"
 
 	"github.com/DanNixon/voile/db"
 
@@ -142,6 +145,10 @@ func SaveBookmarksToFile(bmks *db.BookmarkLibrary) {
 	err = ioutil.WriteFile(
 		viper.GetString(BookmarksFileConfigEntry), []byte(raw), 0644)
 	CheckError(err)
+
+	// Git commit
+	err = CommitChangesToBookmarkFile()
+	CheckError(err)
 }
 
 func GetBookmarksFileParentDirectory() string {
@@ -152,6 +159,46 @@ func GetBookmarksFileParentDirectory() string {
 func IsBookmarksFileInGitRepository() bool {
 	_, err := git.PlainOpen(GetBookmarksFileParentDirectory())
 	return err == nil
+}
+
+func CommitChangesToBookmarkFile() error {
+	gitDir := GetBookmarksFileParentDirectory()
+
+	repo, err := git.PlainOpen(gitDir)
+	if err != nil {
+		return nil
+	}
+
+	wt, err := repo.Worktree()
+	if err != nil {
+		return err
+	}
+
+	file, err := filepath.Rel(gitDir, viper.GetString(BookmarksFileConfigEntry))
+	if err != nil {
+		return err
+	}
+
+	_, err = wt.Add(file)
+	if err != nil {
+		return err
+	}
+
+	username, _ := gitconfig.Username()
+	email, _ := gitconfig.Email()
+
+	_, err = wt.Commit("Commit new changes", &git.CommitOptions{
+		Author: &object.Signature{
+			Name:  username,
+			Email: email,
+			When:  time.Now(),
+		},
+	})
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func init() {

@@ -29,8 +29,8 @@ var gitCmd = &cobra.Command{
 		gitCmd.Stdout = os.Stdout
 		gitCmd.Stderr = os.Stderr
 
-		// Start process
-		err := gitCmd.Start()
+		// Run process
+		err := gitCmd.Run()
 		CheckError(err)
 	},
 }
