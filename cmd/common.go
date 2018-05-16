@@ -187,7 +187,7 @@ func CommitChangesToBookmarkFile() error {
 	username, _ := gitconfig.Username()
 	email, _ := gitconfig.Email()
 
-	_, err = wt.Commit("Commit new changes", &git.CommitOptions{
+	_, err = wt.Commit("voile auto commit", &git.CommitOptions{
 		Author: &object.Signature{
 			Name:  username,
 			Email: email,
