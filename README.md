@@ -15,3 +15,4 @@ go get github.com/DanNixon/voile
 - Text editor based entry manipulation
 - Open bookmarks in browser
 - Copy bookmarks to and from clipboard
+- Integration with Git if bookmarks are stored in a Git repository
