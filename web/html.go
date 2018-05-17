@@ -3,18 +3,19 @@ package web
 import (
 	"errors"
 	"net/http"
+	"strings"
 
 	"golang.org/x/net/html"
 )
 
-func FinditleElementInDocument(n *html.Node) (string, error) {
+func FindTitleElementInDocument(n *html.Node) (string, error) {
 	if n != nil && n.FirstChild != nil {
 		if n.Type == html.ElementNode && n.Data == "title" && n.FirstChild.Type == html.TextNode {
 			return n.FirstChild.Data, nil
 		}
 
 		for c := n.FirstChild; c != nil; c = c.NextSibling {
-			res, err := FinditleElementInDocument(c)
+			res, err := FindTitleElementInDocument(c)
 			if err == nil {
 				return res, nil
 			}
@@ -35,5 +36,6 @@ func FindTitleElement(url string) (string, error) {
 		return "", err
 	}
 
-	return FinditleElementInDocument(doc)
+	title, err := FindTitleElementInDocument(doc)
+	return strings.TrimSpace(title), err
 }
