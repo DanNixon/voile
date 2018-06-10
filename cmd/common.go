@@ -75,7 +75,7 @@ var bookmarkFormatStr = fmt.Sprintf(
 func FormatBookmark(bm *db.Bookmark, index int) string {
 	return fmt.Sprintf(
 		bookmarkFormatStr,
-		index, bm.Name, bm.Number, bm.Url, bm.Tags)
+		index, bm.Name, bm.Number, bm.Url.String(), bm.Tags)
 }
 
 func EditBookmarkInEditor(bmks *db.BookmarkLibrary, bm *db.Bookmark) {

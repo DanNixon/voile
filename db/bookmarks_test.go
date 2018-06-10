@@ -2,6 +2,7 @@ package db_test
 
 import (
 	"errors"
+	"net/url"
 	"sort"
 	"testing"
 
@@ -41,9 +42,13 @@ sport
 `
 
 var testBookmark = db.Bookmark{
-	Number:      0,
-	Name:        "BBC",
-	Url:         "https://bbc.co.uk",
+	Number: 0,
+	Name:   "BBC",
+	Url: db.Url{
+		url.URL{
+			Scheme: "https",
+			Host:   "bbc.co.uk",
+		}},
 	Description: "BBC News and Weather",
 	Tags: db.TagList{
 		Tags: []string{"news", "weather"},
@@ -56,6 +61,11 @@ func createTestLibrary() db.BookmarkLibrary {
 			db.Bookmark{
 				Number: 1,
 				Name:   "one",
+				Url: db.Url{
+					url.URL{
+						Scheme: "https",
+						Host:   "github.com",
+					}},
 				Tags: db.TagList{
 					Tags: []string{"news", "weather"},
 				},
@@ -63,6 +73,11 @@ func createTestLibrary() db.BookmarkLibrary {
 			db.Bookmark{
 				Number: 2,
 				Name:   "two",
+				Url: db.Url{
+					url.URL{
+						Scheme: "https",
+						Host:   "facebook.com",
+					}},
 				Tags: db.TagList{
 					Tags: []string{"software"},
 				},
@@ -70,6 +85,11 @@ func createTestLibrary() db.BookmarkLibrary {
 			db.Bookmark{
 				Number: 3,
 				Name:   "three",
+				Url: db.Url{
+					url.URL{
+						Scheme: "https",
+						Host:   "bbc.co.uk",
+					}},
 				Tags: db.TagList{
 					Tags: []string{"news", "software"},
 				},
@@ -82,9 +102,15 @@ func TestBookmarkInit(t *testing.T) {
 	var bm db.Bookmark
 	assert.Equal(t, 0, bm.Number)
 	assert.Equal(t, "", bm.Name)
-	assert.Equal(t, "", bm.Url)
+	assert.Equal(t, "", bm.Url.String())
 	assert.Equal(t, "", bm.Description)
 	assert.Equal(t, db.TagList{}, bm.Tags)
+}
+
+func TestBookmarkParseUrl(t *testing.T) {
+	var bm db.Bookmark
+	assert.Nil(t, bm.Url.Parse("https://github.com"))
+	assert.Equal(t, "https://github.com", bm.Url.String())
 }
 
 func TestBookmarkNameMatches(t *testing.T) {
@@ -130,9 +156,12 @@ func TestBookmarkUpdateFromInteractiveFileStringMultiline(t *testing.T) {
 	bm.UpdateFromInteractiveFileString(TestBookmarkInteractiveFileExpectedStringMultiline)
 
 	var testBookmark = db.Bookmark{
-		Number:      0,
-		Name:        "BBC",
-		Url:         "https://bbc.co.uk",
+		Number: 0,
+		Name:   "BBC",
+		Url: db.Url{url.URL{
+			Scheme: "https",
+			Host:   "bbc.co.uk",
+		}},
 		Description: "BBC News and Weather.\n(and sport)",
 		Tags: db.TagList{
 			Tags: []string{"news", "sport", "weather"},

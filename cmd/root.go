@@ -46,12 +46,12 @@ var rootCmd = &cobra.Command{
 
 			// Buffer URL for clipboard copy
 			if copyFlag {
-				clipboardBuffer.WriteString(bm.Url)
+				clipboardBuffer.WriteString(bm.Url.String())
 			}
 
 			// Open URL in browser
 			if openFlag {
-				open.Run(bm.Url)
+				open.Run(bm.Url.String())
 			}
 		} else {
 			// Get filter options
@@ -100,12 +100,12 @@ var rootCmd = &cobra.Command{
 					if i > 0 {
 						clipboardBuffer.WriteString("\n")
 					}
-					clipboardBuffer.WriteString(bm.Url)
+					clipboardBuffer.WriteString(bm.Url.String())
 				}
 
 				// Open URL in browser
 				if openFlag {
-					open.Run(bm.Url)
+					open.Run(bm.Url.String())
 				}
 
 				i++

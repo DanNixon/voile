@@ -38,7 +38,7 @@ func subStringMatches(query, source string) bool {
 
 type Bookmark struct {
 	Number      int     `json:"index"`
-	Url         string  `json:"uri"`
+	Url         Url     `json:"uri"`
 	Name        string  `json:"title"`
 	Description string  `json:"description"`
 	Tags        TagList `json:"tags"`
@@ -49,7 +49,7 @@ func (bm *Bookmark) NameMatches(query string) bool {
 }
 
 func (bm *Bookmark) UrlMatches(query string) bool {
-	return subStringMatches(query, bm.Url)
+	return subStringMatches(query, bm.Url.String())
 }
 
 func (bm *Bookmark) DescriptionMatches(query string) bool {
@@ -59,7 +59,7 @@ func (bm *Bookmark) DescriptionMatches(query string) bool {
 func (bm *Bookmark) FormatAsInteractiveFileString() string {
 	return fmt.Sprintf(
 		BookmarkInteractiveFileFormatString,
-		bm.Name, bm.Url, bm.Description, bm.Tags.MultilineString())
+		bm.Name, bm.Url.String(), bm.Description, bm.Tags.MultilineString())
 }
 
 func (bm *Bookmark) UpdateFromInteractiveFileString(data string) error {
@@ -96,7 +96,10 @@ func (bm *Bookmark) UpdateFromInteractiveFileString(data string) error {
 		case BookmarkInteractiveFileNameHeader:
 			bm.Name = l
 		case BookmarkInteractiveFileUrlHeader:
-			bm.Url = l
+			err := bm.Url.Parse(l)
+			if err != nil {
+				return err
+			}
 		case BookmarkInteractiveFileDescriptionHeader:
 			if len(l) > 0 {
 				bm.Description += l
@@ -133,7 +136,7 @@ func (bmks *BookmarkLibrary) Verify() error {
 	urlCounts := make(map[string]int)
 	for _, bm := range bmks.Bookmarks {
 		numberCounts[bm.Number]++
-		urlCounts[bm.Url]++
+		urlCounts[bm.Url.String()]++
 	}
 
 	for number, count := range numberCounts {

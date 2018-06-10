@@ -3,6 +3,7 @@ package web
 import (
 	"errors"
 	"net/http"
+	"net/url"
 	"strings"
 
 	"golang.org/x/net/html"
@@ -25,8 +26,8 @@ func FindTitleElementInDocument(n *html.Node) (string, error) {
 	return "", errors.New("No title element found")
 }
 
-func FindTitleElement(url string) (string, error) {
-	resp, err := http.Get(url)
+func FindTitleElement(url url.URL) (string, error) {
+	resp, err := http.Get(url.String())
 	if err != nil {
 		return "", err
 	}

@@ -37,12 +37,13 @@ var addCmd = &cobra.Command{
 		bm := bmks.NewEntry()
 
 		// Set URL
-		bm.Url = url
+		err := bm.Url.Parse(url)
+		CheckError(err)
 
 		// Set name
 		titleNameFlag, _ := cmd.Flags().GetBool(TitleNameFlagName)
 		if titleNameFlag {
-			bm.Name, _ = web.FindTitleElement(bm.Url)
+			bm.Name, _ = web.FindTitleElement(bm.Url.Url)
 		} else {
 			if cmd.Flags().Changed(NameFlagName) {
 				bm.Name, _ = cmd.Flags().GetString(NameFlagName)

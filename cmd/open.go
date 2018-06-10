@@ -27,7 +27,7 @@ var openCmd = &cobra.Command{
 		fmt.Println(FormatBookmark(bm, 0))
 
 		// Open URL in browser
-		open.Run(bm.Url)
+		open.Run(bm.Url.String())
 	},
 }
 
