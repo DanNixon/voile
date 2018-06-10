@@ -128,15 +128,23 @@ func (bmks *BookmarkLibrary) Swap(i, j int) {
 }
 
 func (bmks *BookmarkLibrary) Verify() error {
-	// Get count of each bookmark number used
-	counts := make(map[int]int)
+	// Get count of each bookmark number and URL used
+	numberCounts := make(map[int]int)
+	urlCounts := make(map[string]int)
 	for _, bm := range bmks.Bookmarks {
-		counts[bm.Number]++
+		numberCounts[bm.Number]++
+		urlCounts[bm.Url]++
 	}
 
-	for number, count := range counts {
+	for number, count := range numberCounts {
 		if count > 1 {
 			return errors.New(fmt.Sprintf("Bookmark number %d used %d times", number, count))
+		}
+	}
+
+	for url, count := range urlCounts {
+		if count > 1 {
+			return errors.New(fmt.Sprintf("Bookmark URL %s used %d times", url, count))
 		}
 	}
 
