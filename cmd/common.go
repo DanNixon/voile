@@ -137,6 +137,10 @@ func ReadBookmarksFromFile() db.BookmarkLibrary {
 }
 
 func SaveBookmarksToFile(bmks *db.BookmarkLibrary) {
+	// Validate the bookmarks before saving
+	err := bmks.Verify()
+	CheckError(err)
+
 	// Write bookmarks to indented JSON string
 	raw, err := json.MarshalIndent(bmks.Bookmarks, "", "  ")
 	CheckError(err)

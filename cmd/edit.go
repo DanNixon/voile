@@ -26,11 +26,11 @@ var editCmd = &cobra.Command{
 		// Edit bookmark
 		EditBookmarkInEditor(&bmks, bm)
 
-		// Print bookmark to console
-		fmt.Println(FormatBookmark(bm, 0))
-
 		// Save bookmarks back to file
 		SaveBookmarksToFile(&bmks)
+
+		// Print bookmark to console
+		fmt.Println(FormatBookmark(bm, 0))
 	},
 }
 
