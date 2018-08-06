@@ -1,4 +1,6 @@
-# Voile [![Build Status](https://travis-ci.org/DanNixon/voile.svg?branch=master)](https://travis-ci.org/DanNixon/voile)
+# Voile
+[![Build Status](https://travis-ci.org/DanNixon/voile.svg?branch=master)](https://travis-ci.org/DanNixon/voile)
+[![Go Report Card](https://goreportcard.com/badge/github.com/dannixon/voile)](https://goreportcard.com/report/github.com/dannixon/voile)
 
 Command line bookmark management tool focused on simplicity and speed.
 
