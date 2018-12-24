@@ -125,7 +125,7 @@ func (bmks *BookmarkLibrary) Len() int {
 }
 
 func (bmks *BookmarkLibrary) Less(i, j int) bool {
-	return bmks.Bookmarks[i].Number < bmks.Bookmarks[j].Number
+	return bmks.Bookmarks[i].WhenAdded.Before(bmks.Bookmarks[j].WhenAdded)
 }
 
 func (bmks *BookmarkLibrary) Swap(i, j int) {
@@ -210,13 +210,11 @@ func (bmks *BookmarkLibrary) GetAllTags() AllTags {
 }
 
 func (bmks *BookmarkLibrary) searchByNumber(number int) (int, error) {
-	i := sort.Search(bmks.Len(), func(i int) bool {
-		return bmks.Bookmarks[i].Number >= number
-	})
-
-	if i < bmks.Len() && bmks.Bookmarks[i].Number == number {
-		return i, nil
-	} else {
-		return 0, errors.New(fmt.Sprintf("No bookmark with number %d found", number))
+	for idx, bm := range bmks.Bookmarks {
+		if bm.Number == number {
+			return idx, nil
+		}
 	}
+
+	return 0, errors.New(fmt.Sprintf("No bookmark with number %d found", number))
 }

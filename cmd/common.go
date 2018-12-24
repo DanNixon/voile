@@ -131,7 +131,6 @@ func ReadBookmarksFromFile() db.BookmarkLibrary {
 	err = bmks.Verify()
 	CheckError(err)
 
-	// Sort (by natural order of bookmark number)
 	sort.Sort(&bmks)
 
 	return bmks

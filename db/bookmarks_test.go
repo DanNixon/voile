@@ -5,6 +5,7 @@ import (
 	"net/url"
 	"sort"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 
@@ -178,11 +179,11 @@ func TestBookmarkLibraryInit(t *testing.T) {
 func TestBookmarkLibrarySort(t *testing.T) {
 	bmks := db.BookmarkLibrary{
 		Bookmarks: []db.Bookmark{
-			db.Bookmark{Number: 7},
-			db.Bookmark{Number: 9},
-			db.Bookmark{Number: 0},
-			db.Bookmark{Number: 4},
-			db.Bookmark{Number: 3},
+			db.Bookmark{Number: 7, WhenAdded: time.Date(2018, time.November, 2, 10, 0, 0, 0, time.UTC)},
+			db.Bookmark{Number: 9, WhenAdded: time.Date(2018, time.December, 1, 10, 0, 0, 0, time.UTC)},
+			db.Bookmark{Number: 0, WhenAdded: time.Date(2018, time.July, 1, 10, 0, 0, 0, time.UTC)},
+			db.Bookmark{Number: 4, WhenAdded: time.Date(2018, time.November, 1, 10, 0, 0, 0, time.UTC)},
+			db.Bookmark{Number: 3, WhenAdded: time.Date(2018, time.October, 1, 10, 0, 0, 0, time.UTC)},
 		},
 	}
 
