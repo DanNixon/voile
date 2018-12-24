@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"sort"
 	"strings"
+	"time"
 
 	"golang.org/x/text/language"
 	"golang.org/x/text/search"
@@ -37,11 +38,12 @@ func subStringMatches(query, source string) bool {
 }
 
 type Bookmark struct {
-	Number      int     `json:"index"`
-	Url         Url     `json:"uri"`
-	Name        string  `json:"title"`
-	Description string  `json:"description"`
-	Tags        TagList `json:"tags"`
+	Number      int       `json:"index"`
+	Url         Url       `json:"uri"`
+	Name        string    `json:"title"`
+	Description string    `json:"description"`
+	Tags        TagList   `json:"tags"`
+	WhenAdded   time.Time `json:"whenAdded"`
 }
 
 func (bm *Bookmark) NameMatches(query string) bool {
@@ -182,8 +184,9 @@ func (bmks *BookmarkLibrary) NewEntry() *Bookmark {
 	}
 
 	bm := Bookmark{
-		Number: maxNumber + 1,
-		Name:   "Untitled",
+		Number:    maxNumber + 1,
+		Name:      "Untitled",
+		WhenAdded: time.Now(),
 	}
 	bmks.Bookmarks = append(bmks.Bookmarks, bm)
 
