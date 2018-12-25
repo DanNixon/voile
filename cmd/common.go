@@ -57,6 +57,9 @@ const (
 
 	DescFlagName  = "desc"
 	DescFlagShort = "d"
+
+	JsonFlagName  = "json"
+	JsonFlagShort = "j"
 )
 
 func CheckError(err error) {

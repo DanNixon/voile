@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 
 	"github.com/atotto/clipboard"
@@ -32,20 +33,72 @@ var rootCmd = &cobra.Command{
 		copyFlag, _ := cmd.Flags().GetBool(CopyFlagName)
 		openFlag, _ := cmd.Flags().GetBool(OpenFlagName)
 
+		// Get display flags
+		jsonFlag, _ := cmd.Flags().GetBool(JsonFlagName)
+
+		// Get filter options
+		bookmarkNumber, _ := cmd.Flags().GetInt(NumberFlagName)
+		tags, _ := cmd.Flags().GetStringSlice(TagsFlagName)
+		name, _ := cmd.Flags().GetString(NameFlagName)
+		url, _ := cmd.Flags().GetString(UrlFlagName)
+		desc, _ := cmd.Flags().GetString(DescFlagName)
+
+		// Setup filtering
+		d := FilteringOptions{
+			[]FilterCase{
+				{
+					cmd.Flags().Changed(NumberFlagName),
+					func(b *db.Bookmark) bool { return b.Number == bookmarkNumber },
+				},
+				{
+					cmd.Flags().Changed(TagsFlagName),
+					func(b *db.Bookmark) bool { return b.Tags.ContainsAllTags(tags) },
+				},
+				{
+					cmd.Flags().Changed(NameFlagName),
+					func(b *db.Bookmark) bool { return b.NameMatches(name) },
+				},
+				{
+					cmd.Flags().Changed(UrlFlagName),
+					func(b *db.Bookmark) bool { return b.UrlMatches(url) },
+				},
+				{
+					cmd.Flags().Changed(DescFlagName),
+					func(b *db.Bookmark) bool { return b.DescriptionMatches(desc) },
+				},
+			},
+		}
+
 		// Buffer for clipboard string
 		var clipboardBuffer bytes.Buffer
 
-		if cmd.Flags().Changed(NumberFlagName) {
-			// Get bookmark entry
-			bookmarkNumber, _ := cmd.Flags().GetInt(NumberFlagName)
-			bm, err := bmks.GetByNumber(bookmarkNumber)
-			CheckError(err)
+		// Collect bookmarks for JSON output
+		var filteredBookmarks []db.Bookmark
 
-			// Print bookmark to console
-			fmt.Println(FormatBookmark(bm, 0))
+		// Filter bookmarks
+		i := 0
+		for _, bm := range bmks.Bookmarks {
+			// Check if this bookmark should be excluded from the results
+			if !includeBookmark(&d, &bm) {
+				continue
+			}
 
-			// Buffer URL for clipboard copy
+			if jsonFlag {
+				// Add bookmark to filtered list for JSON output
+				filteredBookmarks = append(filteredBookmarks, bm)
+			} else {
+				// Output to console in standard format
+				if i > 0 {
+					fmt.Println()
+				}
+				fmt.Println(FormatBookmark(&bm, i))
+			}
+
+			// Buffer URLs for clipboard copy
 			if copyFlag {
+				if i > 0 {
+					clipboardBuffer.WriteString("\n")
+				}
 				clipboardBuffer.WriteString(bm.Url.String())
 			}
 
@@ -53,63 +106,15 @@ var rootCmd = &cobra.Command{
 			if openFlag {
 				open.Run(bm.Url.String())
 			}
-		} else {
-			// Get filter options
-			tags, _ := cmd.Flags().GetStringSlice(TagsFlagName)
-			name, _ := cmd.Flags().GetString(NameFlagName)
-			url, _ := cmd.Flags().GetString(UrlFlagName)
-			desc, _ := cmd.Flags().GetString(DescFlagName)
 
-			// Setup filtering
-			d := FilteringOptions{
-				[]FilterCase{
-					{
-						cmd.Flags().Changed(TagsFlagName),
-						func(b *db.Bookmark) bool { return b.Tags.ContainsAllTags(tags) },
-					},
-					{
-						cmd.Flags().Changed(NameFlagName),
-						func(b *db.Bookmark) bool { return b.NameMatches(name) },
-					},
-					{
-						cmd.Flags().Changed(UrlFlagName),
-						func(b *db.Bookmark) bool { return b.UrlMatches(url) },
-					},
-					{
-						cmd.Flags().Changed(DescFlagName),
-						func(b *db.Bookmark) bool { return b.DescriptionMatches(desc) },
-					},
-				},
-			}
+			i++
+		}
 
-			i := 0
-			for _, bm := range bmks.Bookmarks {
-				// Check if this bookmark should be excluded from the results
-				if !includeBookmark(&d, &bm) {
-					continue
-				}
-
-				// Print bookmark to console
-				if i > 0 {
-					fmt.Println()
-				}
-				fmt.Println(FormatBookmark(&bm, i))
-
-				// Buffer URLs for clipboard copy
-				if copyFlag {
-					if i > 0 {
-						clipboardBuffer.WriteString("\n")
-					}
-					clipboardBuffer.WriteString(bm.Url.String())
-				}
-
-				// Open URL in browser
-				if openFlag {
-					open.Run(bm.Url.String())
-				}
-
-				i++
-			}
+		// Print bookmark to console
+		if jsonFlag {
+			raw, err := json.MarshalIndent(filteredBookmarks, "", "  ")
+			CheckError(err)
+			fmt.Printf("%s\n", raw)
 		}
 
 		// Write URLs to clipboard
@@ -133,6 +138,8 @@ func init() {
 
 	rootCmd.Flags().BoolP(OpenFlagName, OpenFlagShort, false, "Open bookmarks in browser")
 	rootCmd.Flags().BoolP(CopyFlagName, CopyFlagShort, false, "Copy bookmark URLs to clipboard")
+
+	rootCmd.Flags().BoolP(JsonFlagName, JsonFlagShort, false, "Output in JSON format")
 }
 
 func includeBookmark(query *FilteringOptions, bm *db.Bookmark) bool {
