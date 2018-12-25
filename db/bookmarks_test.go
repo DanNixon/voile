@@ -59,7 +59,7 @@ var testBookmark = db.Bookmark{
 func createTestLibrary() db.BookmarkLibrary {
 	return db.BookmarkLibrary{
 		Bookmarks: []db.Bookmark{
-			db.Bookmark{
+			{
 				Number: 1,
 				Name:   "one",
 				Url: db.Url{
@@ -71,7 +71,7 @@ func createTestLibrary() db.BookmarkLibrary {
 					Tags: []string{"news", "weather"},
 				},
 			},
-			db.Bookmark{
+			{
 				Number: 2,
 				Name:   "two",
 				Url: db.Url{
@@ -83,7 +83,7 @@ func createTestLibrary() db.BookmarkLibrary {
 					Tags: []string{"software"},
 				},
 			},
-			db.Bookmark{
+			{
 				Number: 3,
 				Name:   "three",
 				Url: db.Url{
@@ -179,11 +179,11 @@ func TestBookmarkLibraryInit(t *testing.T) {
 func TestBookmarkLibrarySort(t *testing.T) {
 	bmks := db.BookmarkLibrary{
 		Bookmarks: []db.Bookmark{
-			db.Bookmark{Number: 7, WhenAdded: time.Date(2018, time.November, 2, 10, 0, 0, 0, time.UTC)},
-			db.Bookmark{Number: 9, WhenAdded: time.Date(2018, time.December, 1, 10, 0, 0, 0, time.UTC)},
-			db.Bookmark{Number: 0, WhenAdded: time.Date(2018, time.July, 1, 10, 0, 0, 0, time.UTC)},
-			db.Bookmark{Number: 4, WhenAdded: time.Date(2018, time.November, 1, 10, 0, 0, 0, time.UTC)},
-			db.Bookmark{Number: 3, WhenAdded: time.Date(2018, time.October, 1, 10, 0, 0, 0, time.UTC)},
+			{Number: 7, WhenAdded: time.Date(2018, time.November, 2, 10, 0, 0, 0, time.UTC)},
+			{Number: 9, WhenAdded: time.Date(2018, time.December, 1, 10, 0, 0, 0, time.UTC)},
+			{Number: 0, WhenAdded: time.Date(2018, time.July, 1, 10, 0, 0, 0, time.UTC)},
+			{Number: 4, WhenAdded: time.Date(2018, time.November, 1, 10, 0, 0, 0, time.UTC)},
+			{Number: 3, WhenAdded: time.Date(2018, time.October, 1, 10, 0, 0, 0, time.UTC)},
 		},
 	}
 
@@ -205,9 +205,9 @@ func TestBookmarkLibraryVerify(t *testing.T) {
 func TestBookmarkLibraryVerifyDuplicateNumbers(t *testing.T) {
 	bmks := db.BookmarkLibrary{
 		Bookmarks: []db.Bookmark{
-			db.Bookmark{Number: 7},
-			db.Bookmark{Number: 9},
-			db.Bookmark{Number: 7},
+			{Number: 7},
+			{Number: 9},
+			{Number: 7},
 		},
 	}
 

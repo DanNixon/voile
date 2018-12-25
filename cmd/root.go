@@ -63,19 +63,19 @@ var rootCmd = &cobra.Command{
 			// Setup filtering
 			d := FilteringOptions{
 				[]FilterCase{
-					FilterCase{
+					{
 						cmd.Flags().Changed(TagsFlagName),
 						func(b *db.Bookmark) bool { return b.Tags.ContainsAllTags(tags) },
 					},
-					FilterCase{
+					{
 						cmd.Flags().Changed(NameFlagName),
 						func(b *db.Bookmark) bool { return b.NameMatches(name) },
 					},
-					FilterCase{
+					{
 						cmd.Flags().Changed(UrlFlagName),
 						func(b *db.Bookmark) bool { return b.UrlMatches(url) },
 					},
-					FilterCase{
+					{
 						cmd.Flags().Changed(DescFlagName),
 						func(b *db.Bookmark) bool { return b.DescriptionMatches(desc) },
 					},
