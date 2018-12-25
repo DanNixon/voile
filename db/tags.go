@@ -89,9 +89,9 @@ func (tl *TagList) search(tag string) (int, error) {
 
 	if i < tl.Len() && tl.Tags[i] == tag {
 		return i, nil
-	} else {
-		return 0, errors.New(fmt.Sprintf("No tag found matching %s", tag))
 	}
+
+	return 0, errors.New(fmt.Sprintf("No tag found matching %s", tag))
 }
 
 type TagCount map[string]int
