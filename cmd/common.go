@@ -69,17 +69,19 @@ func CheckError(err error) {
 	}
 }
 
-var bookmarkFormatStr = fmt.Sprintf(
-	"%s %s %s%s%s\n  %s %s\n  %s %s\n  %s %s",
-	Gray("%d."), Bold(Green("%s")), Gray("["), Bold(Cyan("%d")), Gray("]"),
-	Red(">"), Brown("%s"),
-	Red("#"), Blue("%s"),
-	Red("+"), Cyan("%s"))
-
 func FormatBookmark(bm *db.Bookmark, index int) string {
-	return fmt.Sprintf(
-		bookmarkFormatStr,
-		index, bm.Name, bm.Number, bm.Url.String(), bm.Tags, bm.WhenAdded.Format(time.UnixDate))
+	retVal := fmt.Sprintf(
+		"%s %s %s%s%s\n  %s %s\n  %s %s\n  %s %s",
+		Gray(strconv.Itoa(index)+"."), Bold(Green(bm.Name)), Gray("["), Bold(Cyan(strconv.Itoa(bm.Number))), Gray("]"),
+		Red(">"), Brown(bm.Url.String()),
+		Red("#"), Blue(bm.Tags),
+		Red("+"), Cyan(bm.WhenAdded.Format(time.UnixDate)))
+
+	if len(bm.Description) > 0 {
+		retVal = fmt.Sprintf("%s\n  %s %s", retVal, Red("?"), bm.Description)
+	}
+
+	return retVal
 }
 
 func EditBookmarkInEditor(bmks *db.BookmarkLibrary, bm *db.Bookmark) {

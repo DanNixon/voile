@@ -103,11 +103,7 @@ func (bm *Bookmark) UpdateFromInteractiveFileString(data string) error {
 				return err
 			}
 		case BookmarkInteractiveFileDescriptionHeader:
-			if len(l) > 0 {
-				bm.Description += l
-			} else {
-				bm.Description += "\n"
-			}
+			bm.Description += l
 		case BookmarkInteractiveFileTagsHeader:
 			bm.Tags.AppendFromString(l)
 		}
