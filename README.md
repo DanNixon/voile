@@ -12,7 +12,7 @@ go get github.com/DanNixon/voile
 
 ## Features
 
-- Plain text (JSON) library (compatible with [Buku](https://github.com/jarun/buku) JSON format)
+- Plain text (JSON) library
 - Query by a combination of tags, name, URL and description
 - Text editor based entry manipulation
 - Open bookmarks in browser
