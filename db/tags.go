@@ -13,15 +13,11 @@ type TagList struct {
 }
 
 func (tl TagList) MarshalJSON() ([]byte, error) {
-	s := strings.Join(tl.Tags, ",")
-	return json.Marshal(s)
+	return json.Marshal(tl.Tags)
 }
 
 func (tl *TagList) UnmarshalJSON(b []byte) error {
-	var tagStr string
-	json.Unmarshal(b, &tagStr)
-	tl.AppendFromString(tagStr)
-	return nil
+	return json.Unmarshal(b, &tl.Tags)
 }
 
 func (tl *TagList) Len() int {
