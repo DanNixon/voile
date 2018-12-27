@@ -35,7 +35,6 @@ BBC
 https://bbc.co.uk
 ## Description
 BBC News and Weather.
-
 (and sport)
 ## Tags (comma and newline separated)
 news,weather
