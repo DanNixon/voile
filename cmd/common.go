@@ -11,7 +11,7 @@ import (
 	"strconv"
 	"time"
 
-	. "github.com/logrusorgru/aurora"
+	"github.com/logrusorgru/aurora"
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -71,31 +71,33 @@ func CheckError(err error) {
 
 func FormatBookmark(bm *db.Bookmark, index int) string {
 	// Generate name
-	var nameStr Value
+	var nameStr aurora.Value
 	if bm.HasName() {
-		nameStr = Green(bm.Name)
+		nameStr = aurora.Green(bm.Name)
 	} else {
-		nameStr = Red("[untitled]")
+		nameStr = aurora.Red("[untitled]")
 	}
 
 	// Name and URL
 	retVal := fmt.Sprintf(
 		"%s %s %s%s%s\n  %s %s",
-		Gray(strconv.Itoa(index)+"."), Bold(nameStr), Gray("["), Bold(Cyan(strconv.Itoa(bm.Number))), Gray("]"),
-		Red(">"), Brown(bm.Url.String()))
+		aurora.Gray(strconv.Itoa(index)+"."), aurora.Bold(nameStr),
+		aurora.Gray("["), aurora.Bold(aurora.Cyan(strconv.Itoa(bm.Number))),
+		aurora.Gray("]"), aurora.Red(">"), aurora.Brown(bm.Url.String()))
 
 	// Tags (if set)
 	if bm.Tags.Len() > 0 {
-		retVal += fmt.Sprintf("\n  %s %s", Red("#"), Blue(bm.Tags))
+		retVal += fmt.Sprintf("\n  %s %s", aurora.Red("#"), aurora.Blue(bm.Tags))
 	}
 
 	// Description (if set)
 	if len(bm.Description) > 0 {
-		retVal += fmt.Sprintf("\n  %s %s", Red("?"), bm.Description)
+		retVal += fmt.Sprintf("\n  %s %s", aurora.Red("?"), bm.Description)
 	}
 
 	// Added timestamp
-	retVal += fmt.Sprintf("\n  %s %s", Red("+"), Cyan(bm.WhenAdded.Format(time.UnixDate)))
+	retVal += fmt.Sprintf("\n  %s %s", aurora.Red("+"),
+		aurora.Cyan(bm.WhenAdded.Format(time.UnixDate)))
 
 	return retVal
 }
