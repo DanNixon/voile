@@ -70,16 +70,24 @@ func CheckError(err error) {
 }
 
 func FormatBookmark(bm *db.Bookmark, index int) string {
+	// Name and URL
 	retVal := fmt.Sprintf(
-		"%s %s %s%s%s\n  %s %s\n  %s %s\n  %s %s",
+		"%s %s %s%s%s\n  %s %s",
 		Gray(strconv.Itoa(index)+"."), Bold(Green(bm.Name)), Gray("["), Bold(Cyan(strconv.Itoa(bm.Number))), Gray("]"),
-		Red(">"), Brown(bm.Url.String()),
-		Red("#"), Blue(bm.Tags),
-		Red("+"), Cyan(bm.WhenAdded.Format(time.UnixDate)))
+		Red(">"), Brown(bm.Url.String()))
 
-	if len(bm.Description) > 0 {
-		retVal = fmt.Sprintf("%s\n  %s %s", retVal, Red("?"), bm.Description)
+	// Tags (if set)
+	if bm.Tags.Len() > 0 {
+		retVal += fmt.Sprintf("\n  %s %s", Red("#"), Blue(bm.Tags))
 	}
+
+	// Description (if set)
+	if len(bm.Description) > 0 {
+		retVal += fmt.Sprintf("\n  %s %s", Red("?"), bm.Description)
+	}
+
+	// Added timestamp
+	retVal += fmt.Sprintf("\n  %s %s", Red("+"), Cyan(bm.WhenAdded.Format(time.UnixDate)))
 
 	return retVal
 }
