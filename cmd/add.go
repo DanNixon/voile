@@ -66,6 +66,10 @@ var addCmd = &cobra.Command{
 		// Edit in editor if requested
 		editFlag, _ := cmd.Flags().GetBool(EditFlagName)
 		if editFlag {
+			// Validate the bookmarks before opening editor
+			err = bmks.Verify()
+			CheckError(err)
+
 			EditBookmarkInEditor(&bmks, bm)
 		}
 
