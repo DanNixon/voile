@@ -107,6 +107,13 @@ func TestBookmarkInit(t *testing.T) {
 	assert.Equal(t, db.TagList{}, bm.Tags)
 }
 
+func TestBookmarkHasName(t *testing.T) {
+	var bm db.Bookmark
+	assert.False(t, bm.HasName())
+	bm.Name = "Test"
+	assert.True(t, bm.HasName())
+}
+
 func TestBookmarkParseUrl(t *testing.T) {
 	var bm db.Bookmark
 	assert.Nil(t, bm.Url.Parse("https://github.com"))

@@ -70,10 +70,18 @@ func CheckError(err error) {
 }
 
 func FormatBookmark(bm *db.Bookmark, index int) string {
+	// Generate name
+	var nameStr Value
+	if bm.HasName() {
+		nameStr = Green(bm.Name)
+	} else {
+		nameStr = Red("[untitled]")
+	}
+
 	// Name and URL
 	retVal := fmt.Sprintf(
 		"%s %s %s%s%s\n  %s %s",
-		Gray(strconv.Itoa(index)+"."), Bold(Green(bm.Name)), Gray("["), Bold(Cyan(strconv.Itoa(bm.Number))), Gray("]"),
+		Gray(strconv.Itoa(index)+"."), Bold(nameStr), Gray("["), Bold(Cyan(strconv.Itoa(bm.Number))), Gray("]"),
 		Red(">"), Brown(bm.Url.String()))
 
 	// Tags (if set)

@@ -46,6 +46,10 @@ type Bookmark struct {
 	WhenAdded   time.Time `json:"whenAdded"`
 }
 
+func (bm Bookmark) HasName() bool {
+	return len(bm.Name) > 0
+}
+
 func (bm *Bookmark) NameMatches(query string) bool {
 	return subStringMatches(query, bm.Name)
 }
