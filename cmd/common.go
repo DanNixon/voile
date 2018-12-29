@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 	"sort"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/logrusorgru/aurora"
@@ -92,7 +93,9 @@ func FormatBookmark(bm *db.Bookmark, index int) string {
 
 	// Description (if set)
 	if len(bm.Description) > 0 {
-		retVal += fmt.Sprintf("\n  %s %s", aurora.Red("?"), bm.Description)
+		r := strings.NewReplacer("\n", "\n    ")
+		retVal += fmt.Sprintf("\n  %s %s", aurora.Red("?"),
+			r.Replace(bm.Description))
 	}
 
 	// Added timestamp
