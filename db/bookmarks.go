@@ -107,11 +107,15 @@ func (bm *Bookmark) UpdateFromInteractiveFileString(data string) error {
 				return err
 			}
 		case BookmarkInteractiveFileDescriptionHeader:
-			bm.Description += l
+			// Append read lines, separated by newline
+			bm.Description += l + "\n"
 		case BookmarkInteractiveFileTagsHeader:
 			bm.Tags.AppendFromString(l)
 		}
 	}
+
+	// Remove newline from last line
+	bm.Description = strings.TrimRight(bm.Description, "\n")
 
 	return nil
 }
