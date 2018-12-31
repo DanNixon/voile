@@ -7,9 +7,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var tagFormatStr = fmt.Sprintf("%s %s %s",
-	aurora.Cyan("-"), aurora.Bold(aurora.Blue("%s")),
-	aurora.Black("(%d)"))
+var tagFormatStr = fmt.Sprintf("- %s (%s)",
+	aurora.Blue("%s"), aurora.Cyan("%d"))
 
 var tagsCmd = &cobra.Command{
 	Use:   "tags",
