@@ -80,6 +80,7 @@ func (bm *Bookmark) UpdateFromInteractiveFileString(data string) error {
 	}
 
 	bm.Description = ""
+	bm.Tags.Clear()
 
 	for _, l := range lines {
 		l = strings.TrimSpace(l)

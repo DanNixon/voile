@@ -15,6 +15,16 @@ func TestTagListInit(t *testing.T) {
 	assert.Nil(t, tl.Tags)
 }
 
+func TestTagListClear(t *testing.T) {
+	tl := db.TagList{
+		Tags: []string{"a", "b", "c"},
+	}
+	assert.Equal(t, []string{"a", "b", "c"}, tl.Tags)
+
+	tl.Clear()
+	assert.Equal(t, []string{}, tl.Tags)
+}
+
 func TestTagListSort(t *testing.T) {
 	tl := db.TagList{
 		Tags: []string{"bbb", "zzz", "iii"},

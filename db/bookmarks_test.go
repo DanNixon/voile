@@ -177,6 +177,24 @@ func TestBookmarkUpdateFromInteractiveFileStringMultiline(t *testing.T) {
 	assert.Equal(t, testBookmark, bm)
 }
 
+func TestBookmarkUpdateFromInteractiveFileStringRemoveTags(t *testing.T) {
+	bm := db.Bookmark{
+		Number: 0,
+		Name:   "BBC",
+		Url: db.Url{url.URL{
+			Scheme: "https",
+			Host:   "bbc.co.uk",
+		}},
+		Description: "BBC News and Weather.",
+		Tags: db.TagList{
+			Tags: []string{"news", "not_sport"},
+		},
+	}
+	bm.UpdateFromInteractiveFileString(TestBookmarkInteractiveFileExpectedString)
+
+	assert.Equal(t, testBookmark, bm)
+}
+
 func TestBookmarkLibraryInit(t *testing.T) {
 	var bmks db.BookmarkLibrary
 	assert.Equal(t, 0, bmks.Len())

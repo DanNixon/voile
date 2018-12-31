@@ -12,6 +12,10 @@ type TagList struct {
 	Tags []string
 }
 
+func (tl *TagList) Clear() {
+	tl.Tags = []string{}
+}
+
 func (tl TagList) MarshalJSON() ([]byte, error) {
 	return json.Marshal(tl.Tags)
 }
