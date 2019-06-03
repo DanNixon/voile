@@ -81,10 +81,10 @@ func FormatBookmark(bm *db.Bookmark, index int) string {
 
 	// Name and URL
 	retVal := fmt.Sprintf(
-		"%s %s %s%s%s\n  %s %s",
-		aurora.Gray(strconv.Itoa(index)+"."), aurora.Bold(nameStr),
-		aurora.Gray("["), aurora.Bold(aurora.Cyan(strconv.Itoa(bm.Number))),
-		aurora.Gray("]"), aurora.Red(">"), aurora.Brown(bm.Url.String()))
+		"%s. %s [%s]\n  %s %s",
+		strconv.Itoa(index), aurora.Bold(nameStr),
+		aurora.Bold(aurora.Cyan(strconv.Itoa(bm.Number))),
+		aurora.Red(">"), aurora.Brown(bm.Url.String()))
 
 	// Tags (if set)
 	if bm.Tags.Len() > 0 {
