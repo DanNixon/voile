@@ -13,7 +13,6 @@ import (
 	"time"
 
 	"github.com/logrusorgru/aurora"
-	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/tcnksm/go-gitconfig"
@@ -237,20 +236,12 @@ func init() {
 }
 
 func initConfig() {
-	// Get home directory
-	home, err := homedir.Dir()
-	CheckError(err)
+	// Setup environment variable config options
+	viper.SetEnvPrefix("voile")
+	viper.BindEnv(BookmarksFileConfigEntry)
 
 	// Set default bookmarks file
-	viper.SetDefault(
-		BookmarksFileConfigEntry,
-		filepath.Join(home, ".voile_bookmarks"))
-
-	// Set config file location
-	viper.SetConfigType("yaml")
-	viper.SetConfigName(".voile")
-	viper.AddConfigPath(home)
-	viper.ReadInConfig()
+	viper.SetDefault(BookmarksFileConfigEntry, "bookmarks.json")
 }
 
 func initBookmarksFile() {
