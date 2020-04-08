@@ -138,6 +138,9 @@ func (bmks *BookmarkLibrary) Len() int {
 }
 
 func (bmks *BookmarkLibrary) Less(i, j int) bool {
+	if bmks.Bookmarks[i].WhenAdded == bmks.Bookmarks[j].WhenAdded {
+		return bmks.Bookmarks[i].Number < bmks.Bookmarks[j].Number
+	}
 	return bmks.Bookmarks[i].WhenAdded.Before(bmks.Bookmarks[j].WhenAdded)
 }
 
