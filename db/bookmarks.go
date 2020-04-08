@@ -44,6 +44,7 @@ type Bookmark struct {
 	Description string    `json:"description"`
 	Tags        TagList   `json:"tags"`
 	WhenAdded   time.Time `json:"whenAdded"`
+	LastUpdated time.Time `json:"lastUpdated"`
 }
 
 func (bm Bookmark) HasName() bool {
@@ -118,7 +119,14 @@ func (bm *Bookmark) UpdateFromInteractiveFileString(data string) error {
 	// Remove newline from last line
 	bm.Description = strings.TrimRight(bm.Description, "\n")
 
+	// Update last edited date
+	bm.MarkUpdated()
+
 	return nil
+}
+
+func (bm *Bookmark) MarkUpdated() {
+	bm.LastUpdated = time.Now()
 }
 
 type BookmarkLibrary struct {
@@ -193,6 +201,7 @@ func (bmks *BookmarkLibrary) NewEntry() *Bookmark {
 		Name:      "Untitled",
 		WhenAdded: time.Now(),
 	}
+	bm.MarkUpdated()
 	bmks.Bookmarks = append(bmks.Bookmarks, bm)
 
 	return &(bmks.Bookmarks[bmks.Len()-1])

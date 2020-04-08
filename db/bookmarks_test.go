@@ -154,12 +154,19 @@ func TestBookmarkFormatAsInteractiveFileString(t *testing.T) {
 
 func TestBookmarkUpdateFromInteractiveFileString(t *testing.T) {
 	var bm db.Bookmark
+
+	var oldLastUpdated = bm.LastUpdated
 	bm.UpdateFromInteractiveFileString(TestBookmarkInteractiveFileExpectedString)
+
+	testBookmark.LastUpdated = bm.LastUpdated
 	assert.Equal(t, testBookmark, bm)
+	assert.NotEqual(t, oldLastUpdated, bm.LastUpdated)
 }
 
 func TestBookmarkUpdateFromInteractiveFileStringMultiline(t *testing.T) {
 	var bm db.Bookmark
+
+	var oldLastUpdated = bm.LastUpdated
 	bm.UpdateFromInteractiveFileString(TestBookmarkInteractiveFileExpectedStringMultiline)
 
 	var testBookmark = db.Bookmark{
@@ -173,8 +180,10 @@ func TestBookmarkUpdateFromInteractiveFileStringMultiline(t *testing.T) {
 		Tags: db.TagList{
 			Tags: []string{"news", "sport", "weather"},
 		},
+		LastUpdated: bm.LastUpdated,
 	}
 	assert.Equal(t, testBookmark, bm)
+	assert.NotEqual(t, oldLastUpdated, bm.LastUpdated)
 }
 
 func TestBookmarkUpdateFromInteractiveFileStringRemoveTags(t *testing.T) {
@@ -190,9 +199,13 @@ func TestBookmarkUpdateFromInteractiveFileStringRemoveTags(t *testing.T) {
 			Tags: []string{"news", "not_sport"},
 		},
 	}
+
+	var oldLastUpdated = bm.LastUpdated
 	bm.UpdateFromInteractiveFileString(TestBookmarkInteractiveFileExpectedString)
 
+	testBookmark.LastUpdated = bm.LastUpdated
 	assert.Equal(t, testBookmark, bm)
+	assert.NotEqual(t, oldLastUpdated, bm.LastUpdated)
 }
 
 func TestBookmarkLibraryInit(t *testing.T) {
