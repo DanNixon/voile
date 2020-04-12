@@ -19,3 +19,4 @@ go get github.com/DanNixon/voile
 - Copy bookmarks to and from clipboard
 - Integration with Git if bookmarks are stored in a Git repository
 - Integration with [Newsboat's](https://newsboat.org/) [bookmark plugin architecture](https://newsboat.org/releases/2.19/docs/newsboat.html#_bookmarking)
+- Helper to prune old bookmarks/keep bookmarks up to date
